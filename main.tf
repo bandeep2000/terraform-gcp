@@ -1,9 +1,9 @@
 //https://github.wdf.sap.corp/Ariba-ces/bootstrap/blob/develop/modules/compute/cdh/modules/instance/main.tf
-
 variable "vm_count" {
   default = "1"
 }
 
+# Boot disk for VM
 resource "google_compute_disk" "boot-disk" {
   count = "${var.vm_count}"
   name  = "boot-disk-influx-${count.index}"
@@ -13,15 +13,17 @@ resource "google_compute_disk" "boot-disk" {
   image = "rhel-6-v20190213"
 }
 
+# standard persistent disk (not ssd ) for influx data
 resource "google_compute_disk" "influx-data" {
   count = "${var.vm_count}"
   name  = "ban-influx-data-terraform"
   type  = "pd-standard"
   zone  = "us-west1-a"
-  size  = "500"
+  size  = "600"
   
 }
 
+# ssd persistence disk wal
 resource "google_compute_disk" "influx-wal" {
   name = "ban-influx-wal-terraform"
   type = "pd-ssd"
@@ -33,6 +35,7 @@ resource "google_compute_disk" "influx-wal" {
   }
 }
 
+# Create VM now
 resource "google_compute_instance" "default" {
   depends_on   = ["google_compute_disk.influx-wal","google_compute_disk.boot-disk"]
   name         = "ban-terraform-influx"
@@ -63,6 +66,9 @@ resource "google_compute_instance" "default" {
   }
 
   //labels = "influx"
+  labels = {
+    influx = "server"
+  }
 
   attached_disk {
     source      = "${google_compute_disk.influx-wal.self_link}"
