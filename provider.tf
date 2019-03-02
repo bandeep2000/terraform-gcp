@@ -3,8 +3,8 @@ provider "google" {
   version = "~> 1.19"
 
   //credentials = "${file("test/sap-ariba-prod-transit-52443a67123d.json")}"
-  credentials = "${file("account-cobalt.json")}"
-  project     = "sap-ariba-cobalt"
+  credentials = "${file("/var/accounts/account-cobalt.json")}"
+  project     = "${var.project}"
 
   //region      = "${var.region_id}"
 }

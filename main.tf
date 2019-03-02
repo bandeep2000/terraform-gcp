@@ -1,16 +1,12 @@
 //https://github.wdf.sap.corp/Ariba-ces/bootstrap/blob/develop/modules/compute/cdh/modules/instance/main.tf
-variable "vm_count" {
-  default = "1"
-}
-
 # Boot disk for VM
 resource "google_compute_disk" "boot-disk" {
   count = "${var.vm_count}"
   name  = "boot-disk-influx-${count.index}"
   type  = "pd-ssd"
-  zone  = "us-west1-a"
+  zone  = "${var.zone}"
   size  = "10"
-  image = "rhel-6-v20190213"
+  image = "${var.image}"
 }
 
 # standard persistent disk (not ssd ) for influx data
@@ -18,16 +14,17 @@ resource "google_compute_disk" "influx-data" {
   count = "${var.vm_count}"
   name  = "ban-influx-data-terraform"
   type  = "pd-standard"
-  zone  = "us-west1-a"
+  zone  = "${var.zone}"
   size  = "600"
   
 }
 
 # ssd persistence disk wal
 resource "google_compute_disk" "influx-wal" {
+  count = "${var.vm_count}"
   name = "ban-influx-wal-terraform"
   type = "pd-ssd"
-  zone = "us-west1-a"
+  zone = "${var.zone}"
   size = "100"
 
   labels = {
@@ -40,7 +37,7 @@ resource "google_compute_instance" "default" {
   depends_on   = ["google_compute_disk.influx-wal","google_compute_disk.boot-disk"]
   name         = "ban-terraform-influx"
   machine_type = "n1-standard-1"
-  zone         = "us-west1-a"
+  zone         = "${var.zone}"
 
   tags = ["influx"]
 
@@ -71,12 +68,13 @@ resource "google_compute_instance" "default" {
   }
 
   attached_disk {
-    source      = "${google_compute_disk.influx-wal.self_link}"
+    
+    source      = "${google_compute_disk.influx-wal.*.self_link[count.index]}"
     device_name = "ban-influx-wal-terraform1"
   }
 
   attached_disk {
-    source      = "${google_compute_disk.influx-data.self_link}"
+    source      = "${google_compute_disk.influx-data.*.self_link[count.index]}"
     device_name = "ban-influx-data-terraform1"
   }
   metadata = {
@@ -88,9 +86,5 @@ resource "google_compute_instance" "default" {
   }
 }
 
-/*resource "google_compute_attached_disk" "default" {
-//  disk = "${google_compute_disk.influx-wal.self_link}"
-//  instance = "${google_compute_instance.default.self_link}"
-}
-*/
+
 
