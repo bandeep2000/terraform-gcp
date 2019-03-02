@@ -4,10 +4,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo 'Creating infra..'
                 sh 'terraform init'
                 sh 'terraform plan -out planfile'
-                sh 'terraform apply'
-                echo 'Building..'
+                sh 'terraform apply planfile'
+                sh 'terraform destroy --force'
+                
             }
         }
         stage('Test') {
