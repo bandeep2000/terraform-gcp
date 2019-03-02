@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'teraform init'
+                sh 'terraform init'
                 sh 'terraform plan -out planfile'
                 sh 'terraform apply'
                 echo 'Building..'
