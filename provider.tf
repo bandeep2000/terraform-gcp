@@ -6,5 +6,5 @@ provider "google" {
   credentials = "${file("/var/accounts/account-cobalt.json")}"
   project     = "${var.project}"
 
-  //region      = "${var.region_id}"
+  region      = "${var.region_id}"
 }

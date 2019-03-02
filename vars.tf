@@ -17,3 +17,7 @@ variable "network" {
 variable "project" {
   default = "sap-ariba-cobalt"
 }
+
+variable "region_id" {
+  default = "us-west1"
+}
