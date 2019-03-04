@@ -50,6 +50,7 @@ pipeline {
                 println ret
                 echo "ret $ret"
                 }
+                echo "ret $ret"
                 sh 'inspec exec test/influx-disk.rb -t ssh://$USER@${result} -i /var/ssh/key.pem'
               
             }
