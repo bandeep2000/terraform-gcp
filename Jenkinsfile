@@ -14,7 +14,7 @@ pipeline {
         stage ('Construct Img name') {
             steps {
                 script {
-                    jobBaseName = sh(
+                    def jobBaseName = sh(
                         script: "terraform output ip",
                         returnStdout: true,
                     )
@@ -23,6 +23,12 @@ pipeline {
         }
         stage('Test') {
             steps {
+                script {
+                    def jobBaseName = sh(
+                        script: "terraform output ip",
+                        returnStdout: true,
+                    )
+                }   
                 echo 'Testing..'
                 sh 'ip=$(terraform output ip)'
                 sh 'echo $ip'
