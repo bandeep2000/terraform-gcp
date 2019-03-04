@@ -21,7 +21,7 @@ pipeline {
                 }   
             }
         }
-        def jobBaseName
+        
         stage('Test') {
             steps {
                 
@@ -33,6 +33,7 @@ pipeline {
                 }   
                 echo 'Testing..'
                 sh 'ip=$(terraform output ip)'
+                sh 'echo $(terraform output ip)'
                 sh 'echo $ip'
                 sh 'export IP=$ip'
                 sh 'echo $USER'
