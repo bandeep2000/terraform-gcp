@@ -38,13 +38,14 @@ pipeline {
                 script {
                     result = readFile('commandResult').trim()
                     println result
+                    sh script 'inspec exec test/influx-disk.rb -t ssh://$USER@$ -i /var/ssh/key.pem'
                 }
-                sh 'echo Ip is $ip'
+                sh 'echo Ip is \$ip'
                 sh 'export IP=$ip'
                 sh 'echo $USER'
                 sh 'echo ${BUILD_TAG}'
                 sh 'echo ${jobBaseName}'
-                sh 'inspec exec test/influx-disk.rb -t ssh://$USER@$IP -i /var/ssh/key.pem'
+                sh 'inspec exec test/influx-disk.rb -t ssh://$USER@$ -i /var/ssh/key.pem'
               
             }
         }
