@@ -12,11 +12,11 @@ pipeline {
             }
         }
         stage ('Construct Img name') {
-            jobBaseName = sh(
+            def jobBaseName = sh(
                 script: "terraform output ip",
                 returnStdout: true,
             )
-            }
+        }
         stage('Test') {
             steps {
                 echo 'Testing..'
