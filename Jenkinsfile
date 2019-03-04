@@ -32,7 +32,7 @@ pipeline {
                     )
                 }   
                 echo 'Testing..'
-                sh "ip=$(terraform output ip)"
+                sh 'ip=$(terraform output ip)'
                 sh 'echo $(terraform output ip)'
                 sh 'terraform output ip > commandResult'
                 result = readFile('commandResult').trim()
