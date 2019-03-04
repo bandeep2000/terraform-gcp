@@ -2,7 +2,7 @@
 # Boot disk for VM
 resource "google_compute_disk" "boot-disk" {
   count = "${var.vm_count}"
-  name  = "boot-disk-influx-${count.index}"
+  name  = "${var.prefix}-boot-disk-influx-${count.index}"
   type  = "pd-ssd"
   zone  = "${var.zone}"
   size  = "10"
@@ -12,7 +12,7 @@ resource "google_compute_disk" "boot-disk" {
 # standard persistent disk (not ssd ) for influx data
 resource "google_compute_disk" "influx-data" {
   count = "${var.vm_count}"
-  name  = "ban-influx-data-terraform"
+  name  = "${var.prefix}-influx-data-terraform"
   type  = "pd-standard"
   zone  = "${var.zone}"
   size  = "600"
@@ -22,7 +22,7 @@ resource "google_compute_disk" "influx-data" {
 # ssd persistence disk wal
 resource "google_compute_disk" "influx-wal" {
   count = "${var.vm_count}"
-  name = "ban-influx-wal-terraform"
+  name = "${var.prefix}-influx-wal-terraform"
   type = "pd-ssd"
   zone = "${var.zone}"
   size = "100"
@@ -35,7 +35,7 @@ resource "google_compute_disk" "influx-wal" {
 # Create VM now
 resource "google_compute_instance" "default" {
   depends_on   = ["google_compute_disk.influx-wal","google_compute_disk.boot-disk"]
-  name         = "ban-terraform-influx"
+  name         = "${var.prefix}-terraform-influx"
   machine_type = "n1-standard-1"
   zone         = "${var.zone}"
 
@@ -47,7 +47,7 @@ resource "google_compute_instance" "default" {
 
   /*boot_disk {
     initialize_params {
-      image = "rhel-6-v20190213"
+      //image = "rhel-6-v20190213"
     }
   }
   */
@@ -70,12 +70,12 @@ resource "google_compute_instance" "default" {
   attached_disk {
     
     source      = "${google_compute_disk.influx-wal.*.self_link[count.index]}"
-    device_name = "ban-influx-wal-terraform1"
+    device_name = "${var.prefix}-influx-wal-terraform"
   }
 
   attached_disk {
     source      = "${google_compute_disk.influx-data.*.self_link[count.index]}"
-    device_name = "ban-influx-data-terraform1"
+    device_name = "${var.prefix}-influx-data-terraform"
   }
   metadata = {
     foo = "bar"

@@ -21,3 +21,8 @@ variable "project" {
 variable "region_id" {
   default = "us-west1"
 }
+
+variable "prefix" {
+  default = "ban-"
+}
+
