@@ -40,19 +40,18 @@ pipeline {
                     println result
                     //sh script 'inspec exec test/influx-disk.rb -t ssh://$USER@$ -i /var/ssh/key.pem'
                 }
-                sh 'echo Ip is \$ip'
-                sh 'export IP=$ip'
-                sh 'echo $USER'
+                
                 sh 'echo ${BUILD_TAG}'
-                sh 'echo ${jobBaseName}'
+                
                 script { 
-                env.ret = sh(script: 'terraform output ip', returnStdout: true)
-                println ret
-                echo "ret $ret"
-                sh script: 'inspec exec test/influx-disk.rb -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
+                    // made in env variable, so it could interpolate
+                    env.ret = sh(script: 'terraform output ip', returnStdout: true)
+                    println ret
+                    
+                    sh script: 'inspec exec test/influx-test-disk.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
                 }
                 
-                sh 'inspec exec test/influx-disk.rb -t ssh://$USER@${result} -i /var/ssh/key.pem'
+                
               
             }
         }
