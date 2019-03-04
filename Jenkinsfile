@@ -11,16 +11,6 @@ pipeline {
                 
             }
         }
-        stage ('Construct Img name') {
-            steps {
-                script {
-                    def jobBaseName = sh(
-                        script: "terraform output ip",
-                        returnStdout: true,
-                    )
-                }   
-            }
-        }
         
         stage('Test') {
             steps {
@@ -34,11 +24,13 @@ pipeline {
                 echo 'Testing..'
                 sh 'ip=$(terraform output ip)'
                 sh 'echo $(terraform output ip)'
+                
+                //Need to delete this
                 sh 'terraform output ip > commandResult'
                 script {
                     result = readFile('commandResult').trim()
                     println result
-                    //sh script 'inspec exec test/influx-disk.rb -t ssh://$USER@$ -i /var/ssh/key.pem'
+                    
                 }
                 
                 sh 'echo ${BUILD_TAG}'
@@ -49,10 +41,7 @@ pipeline {
                     println ret
                     
                     sh script: 'inspec exec test/influx-test-disk.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
-                }
-                
-                
-              
+                } 
             }
         }
 
