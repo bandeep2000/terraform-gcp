@@ -8,7 +8,6 @@ pipeline {
                 sh 'terraform init'
                 sh 'terraform plan -out planfile'
                 sh 'terraform apply planfile'
-                sh 'terraform destroy --force'
                 
             }
         }
