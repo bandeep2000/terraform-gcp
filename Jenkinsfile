@@ -27,9 +27,10 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Cleanup') {
             steps {
                 echo 'Deploying....'
+                sh 'terraform destroy -force'
                 
             }
         }
