@@ -16,6 +16,7 @@ pipeline {
                 echo 'Testing..'
                 sh 'ip=$(terraform output ip)'
                 sh 'echo $ip'
+                sh 'echo $USER'
               
             }
         }
