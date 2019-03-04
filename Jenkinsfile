@@ -23,8 +23,9 @@ pipeline {
         }
         stage('Test') {
             steps {
+                def jobBaseName
                 script {
-                    def jobBaseName = sh(
+                    jobBaseName = sh(
                         script: "terraform output ip",
                         returnStdout: true,
                     )
