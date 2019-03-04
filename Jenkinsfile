@@ -45,8 +45,11 @@ pipeline {
                 sh 'echo $USER'
                 sh 'echo ${BUILD_TAG}'
                 sh 'echo ${jobBaseName}'
+                script { 
                 def ret = sh(script: 'uname', returnStdout: true)
                 println ret
+                echo "ret $ret"
+                }
                 sh 'inspec exec test/influx-disk.rb -t ssh://$USER@${result} -i /var/ssh/key.pem'
               
             }
