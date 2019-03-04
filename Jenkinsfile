@@ -32,9 +32,12 @@ pipeline {
                     )
                 }   
                 echo 'Testing..'
-                sh 'ip=$(terraform output ip)'
+                sh "ip=$(terraform output ip)""
                 sh 'echo $(terraform output ip)'
-                sh 'echo $ip'
+                sh 'terraform output ip > commandResult'
+                result = readFile('commandResult').trim()
+                println result
+                sh 'echo Ip is $ip'
                 sh 'export IP=$ip'
                 sh 'echo $USER'
                 sh 'echo ${BUILD_TAG}'
