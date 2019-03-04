@@ -11,6 +11,12 @@ pipeline {
                 
             }
         }
+        stage ('Construct Img name') {
+            jobBaseName = sh(
+                script: "terraform output ip",
+                returnStdout: true,
+            )
+            }
         stage('Test') {
             steps {
                 echo 'Testing..'
@@ -18,6 +24,8 @@ pipeline {
                 sh 'echo $ip'
                 sh 'export IP=$ip'
                 sh 'echo $USER'
+                sh 'echo ${BUILD_TAG}'
+                sh 'echo ${jobBaseName}'
                 sh 'inspec exec test/influx-disk.rb -t ssh://$USER@$IP -i /var/ssh/key.pem'
               
             }
