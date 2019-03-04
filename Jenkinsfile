@@ -15,6 +15,9 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
+                sh 'ip=$(terraform output ip)'
+                sh 'echo $ip'
+              
             }
         }
         stage('Deploy') {
