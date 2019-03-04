@@ -16,8 +16,9 @@ pipeline {
                 echo 'Testing..'
                 sh 'ip=$(terraform output ip)'
                 sh 'echo $ip'
+                sh 'export IP=$ip'
                 sh 'echo $USER'
-                sh 'inspec exec test/influx-disk.rb -t ssh://$USER@${ip} -i /var/ssh/key.pem'
+                sh 'inspec exec test/influx-disk.rb -t ssh://$USER@$IP -i /var/ssh/key.pem'
               
             }
         }
