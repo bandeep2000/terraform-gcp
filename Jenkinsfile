@@ -46,11 +46,12 @@ pipeline {
                 sh 'echo ${BUILD_TAG}'
                 sh 'echo ${jobBaseName}'
                 script { 
-                def ret = sh(script: 'uname', returnStdout: true)
+                def ret = sh(script: 'terraform output ip', returnStdout: true)
                 println ret
                 echo "ret $ret"
+                sh script: 'inspec exec test/influx-disk.rb -t ssh://$USER@$ret -i /var/ssh/key.pem'
                 }
-                echo "ret $ret"
+                
                 sh 'inspec exec test/influx-disk.rb -t ssh://$USER@${result} -i /var/ssh/key.pem'
               
             }
