@@ -13,11 +13,12 @@ pipeline {
         }
         stage ('Construct Img name') {
             steps {
-                
-                jobBaseName = sh(
-                    script: "terraform output ip",
-                    returnStdout: true,
-                )
+                script {
+                    jobBaseName = sh(
+                        script: "terraform output ip",
+                        returnStdout: true,
+                    )
+                }   
             }
         }
         stage('Test') {
