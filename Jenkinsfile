@@ -35,8 +35,10 @@ pipeline {
                 sh 'ip=$(terraform output ip)'
                 sh 'echo $(terraform output ip)'
                 sh 'terraform output ip > commandResult'
-                result = readFile('commandResult').trim()
-                println result
+                script {
+                    result = readFile('commandResult').trim()
+                    println result
+                }
                 sh 'echo Ip is $ip'
                 sh 'export IP=$ip'
                 sh 'echo $USER'
