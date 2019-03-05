@@ -23,6 +23,6 @@ variable "region_id" {
 }
 
 variable "prefix" {
-  default = "ban1"
+  default = "ban"
 }
 

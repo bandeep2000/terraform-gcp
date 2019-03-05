@@ -12,7 +12,7 @@ resource "google_compute_disk" "boot-disk" {
 # standard persistent disk (not ssd ) for influx data
 resource "google_compute_disk" "influx-data" {
   count = "${var.vm_count}"
-  name  = "${var.prefix}-influx-data-terraform"
+  name  = "${var.prefix}-influx-data-terraform-${count.index}"
   type  = "pd-standard"
   zone  = "${var.zone}"
   size  = "600"
@@ -22,7 +22,7 @@ resource "google_compute_disk" "influx-data" {
 # ssd persistence disk wal
 resource "google_compute_disk" "influx-wal" {
   count = "${var.vm_count}"
-  name = "${var.prefix}-influx-wal-terraform"
+  name = "${var.prefix}-influx-wal-terraform-${count.index}"
   type = "pd-ssd"
   zone = "${var.zone}"
   size = "100"
@@ -32,10 +32,24 @@ resource "google_compute_disk" "influx-wal" {
   }
 }
 
+/*
+resource "google_compute_snapshot" "snapshot" {
+    name = "${var.prefix}-influx-wal-terraform-snapshot-${count.index}"
+    source_disk = "${google_compute_disk.influx-wal.name}"
+  
+    zone = "${var.zone}"
+    labels = {
+        my_label = "value"
+    }
+}
+*/
+
+
 # Create VM now
 resource "google_compute_instance" "default" {
+  count = "${var.vm_count}"
   depends_on   = ["google_compute_disk.influx-wal","google_compute_disk.boot-disk"]
-  name         = "${var.prefix}-terraform-influx"
+  name         = "${var.prefix}-terraform-influx-${count.index}"
   machine_type = "n1-standard-1"
   zone         = "${var.zone}"
 
