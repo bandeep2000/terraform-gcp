@@ -49,7 +49,7 @@ pipeline {
             steps {
                 sh 'git clone https://github.com/bandeep2000/ansibile-influx.git'
                 sh 'cd ansibile-influx'
-                sh 'ansible-playbook -s   --private-key=~/var/ssh/key.pem -i inventories/test/ playbook/gcp-influx.yml'
+                sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i inventories/test/ playbook/gcp-influx.yml'
             }
         }
 

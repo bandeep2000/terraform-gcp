@@ -1,0 +1,4 @@
+terraform.tfstate
+influxdb/.terraform*
+influxdb/.terraform*
+.terraform*
