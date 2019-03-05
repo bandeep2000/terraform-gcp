@@ -66,10 +66,10 @@ pipeline {
                             
                             sh script: 'sudo inspec exec test/influx-service-up.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
                             //sh script : "sudo sed -i 's/GCP_INFLUX/${ret}/' test/influx-ping.rb"
-                            env.GCP_INFLUX = sh(script: 'terraform output ip', returnStdout: true)
-                            sh script 'export GCP_INFLUX=$GCP_INFLUX'
+                            //env.GCP_INFLUX = sh(script: 'terraform output ip', returnStdout: true)
+                            //sh script 'export GCP_INFLUX=$GCP_INFLUX'
                             //print GCP_INFLUX
-                            sh script: 'sudo inspec exec test/influx-ping.rb'
+                            //sh script: 'sudo inspec exec test/influx-ping.rb'
                         } 
                 }
         }
