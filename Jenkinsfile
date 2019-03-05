@@ -48,6 +48,7 @@ pipeline {
 
         stage('Configure influx') {
             steps {
+                sh 'rm -rf ansibile-influx'
                 sh 'git clone https://github.com/bandeep2000/ansibile-influx.git'
                 sh 'cd ansibile-influx'
                 sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i inventories/test/ playbook/gcp-influx.yml'
