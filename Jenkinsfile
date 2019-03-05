@@ -45,6 +45,12 @@ pipeline {
             }
         }
 
+        stage('Configure influx') {
+            steps {
+                sh ''
+            }
+        }
+
         stage('Approval') {
             steps {
                 script {
