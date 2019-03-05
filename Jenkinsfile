@@ -13,7 +13,7 @@ pipeline {
             }
         }
         
-        stage('Test') {
+        stage('Test disks') {
             steps {
                 
                 script {
@@ -57,6 +57,17 @@ pipeline {
             }
         }
 
+        stage('Test influx') {
+            steps {
+                script { 
+                            // made in env variable, so it could interpolate
+                            env.ret = sh(script: 'terraform output ip', returnStdout: true)
+                            println ret
+                            
+                            sh script: 'sudo inspec exec test/influx-test-disk.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
+                        } 
+                }
+        }
         stage('Approval') {
             steps {
                 script {
