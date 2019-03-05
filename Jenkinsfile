@@ -53,7 +53,7 @@ pipeline {
                 sh 'cd ansibile-influx'
                 sh 'pwd'
                 sh 'ls'
-                sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i inventories/test/ playbook/gcp-influx.yml'
+                sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
             }
         }
 
