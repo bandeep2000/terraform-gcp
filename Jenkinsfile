@@ -51,6 +51,7 @@ pipeline {
                 sh 'rm -rf ansibile-influx'
                 sh 'git clone https://github.com/bandeep2000/ansibile-influx.git'
                 sh 'cd ansibile-influx'
+                cd ansibile-influx
                 sh 'pwd'
                 sh 'ls'
                 sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
