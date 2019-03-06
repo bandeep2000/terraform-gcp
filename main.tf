@@ -16,16 +16,15 @@ resource "google_compute_disk" "influx-data" {
   type  = "pd-standard"
   zone  = "${var.zone}"
   size  = "600"
-  
 }
 
 # ssd persistence disk wal
 resource "google_compute_disk" "influx-wal" {
   count = "${var.vm_count}"
-  name = "${var.prefix}-influx-wal-terraform-${count.index}"
-  type = "pd-ssd"
-  zone = "${var.zone}"
-  size = "100"
+  name  = "${var.prefix}-influx-wal-terraform-${count.index}"
+  type  = "pd-ssd"
+  zone  = "${var.zone}"
+  size  = "100"
 
   labels = {
     environment = "influx"
@@ -44,11 +43,10 @@ resource "google_compute_snapshot" "snapshot" {
 }
 */
 
-
 # Create VM now
 resource "google_compute_instance" "default" {
-  count = "${var.vm_count}"
-  depends_on   = ["google_compute_disk.influx-wal","google_compute_disk.boot-disk"]
+  count        = "${var.vm_count}"
+  depends_on   = ["google_compute_disk.influx-wal", "google_compute_disk.boot-disk"]
   name         = "${var.prefix}-terraform-influx-${count.index}"
   machine_type = "n1-standard-1"
   zone         = "${var.zone}"
@@ -75,18 +73,14 @@ resource "google_compute_instance" "default" {
       // Ephemeral IP
     }
   }
-
   //labels = "influx"
   labels = {
     influx = "server"
   }
-
   attached_disk {
-    
     source      = "${google_compute_disk.influx-wal.*.self_link[count.index]}"
     device_name = "${var.prefix}-influx-wal-terraform"
   }
-
   attached_disk {
     source      = "${google_compute_disk.influx-data.*.self_link[count.index]}"
     device_name = "${var.prefix}-influx-data-terraform"
@@ -100,5 +94,45 @@ resource "google_compute_instance" "default" {
   }
 }
 
+# Create VM now
+resource "google_compute_instance" "grafana" {
+  //making count as 1
+  count = "1"
 
+  name         = "${var.prefix}-terraform-grafana-${count.index}"
+  machine_type = "n1-standard-1"
+  zone         = "${var.zone}"
 
+  tags = ["influx"]
+
+  boot_disk {
+    initialize_params {
+      image = "grafana-packer-rhel-7"
+    }
+  }
+
+  // Local SSD disk
+  //scratch_disk {}
+  network_interface {
+    network = "default"
+
+    access_config {
+      // Ephemeral IP
+    }
+  }
+
+  //labels = "influx"
+  labels = {
+    influx = "grafana"
+  }
+
+  metadata = {
+    foo = "bar"
+  }
+
+  metadata_startup_script = "echo hi > /test.txt"
+
+  service_account {
+    scopes = ["userinfo-email", "compute-ro", "storage-ro"]
+  }
+}
