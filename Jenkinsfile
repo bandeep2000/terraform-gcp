@@ -80,11 +80,14 @@ pipeline {
                         credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
                         branch: "master"
                         )
-                        */    
+                        */  
+
+                        // TODO add catch try  
                                   
                         sh script: 'rm -rf terraform-url.tfvars'
+                        // Copy template
                         sh script: 'cp terraform-url.tmpl terraform-url.tfvars'
-                        sh script: "sed -i 's/INFLUX/35.197.76.190/' terraform-url.tfvars"
+                        
                         sh script: "sed -i 's/INFLUX/" + ip_influx + "/'"  + " terraform-url.tfvars"
                         sh script: "sed -i 's/GRAFANA/" + ip_grafana + "/'"  + " terraform-url.tfvars"
                         
