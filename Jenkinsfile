@@ -71,10 +71,10 @@ pipeline {
                         sh script: 'cp terraform-url.tmpl terraform-url.tfvars'
                         sh script: "sed -i 's/INFLUX/35.197.76.191/' terraform-url.tfvars"
                         sh script: "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
-                        sh script: "git add terraform-url.tfvars"
-                        sh script: "git commit -m 'Modified url tfvars file'"
+                        //sh script: "git add terraform-url.tfvars"
+                        //sh script: "git commit -m 'Modified url tfvars file'"
                         
-                        sh script: "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
+                        //sh script: "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
                     }
                 }
                 
