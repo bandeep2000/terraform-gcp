@@ -25,7 +25,7 @@ pipeline {
                     env.ip_influx = sh(script: 'terraform output ip', returnStdout: true).trim()
                     //env.ip_grafana = sh(script: 'terraform output ip', returnStdout: true).trim()
                     //cd to directory checked out in prev step
-                    dir ('terraform-grafana') {
+                    dir ('terraform-influx-conf') {
                         sh script: 'pwd'
                     
                         /*git(
