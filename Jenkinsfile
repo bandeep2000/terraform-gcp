@@ -46,6 +46,21 @@ pipeline {
             }
         }
 
+        stage('Checkout external proj') {
+            steps {
+                script {
+                    git(
+                    url: 'https://github.com/bandeep2000/terraform-grafana.git',
+                    credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
+                    branch: "master"
+                    )
+                    
+
+                    sh "ls -lat"
+                }
+            }
+        }
+
         stage('Configure grafana') {
             steps {
                 sh 'rm -rf terraform-grafana'
