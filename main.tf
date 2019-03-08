@@ -94,7 +94,7 @@ resource "google_compute_instance" "default" {
   }
 }
 
-# Create VM now
+# Create Grafana VM
 resource "google_compute_instance" "grafana" {
   //making count as 1
   count = "1"

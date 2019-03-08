@@ -46,6 +46,23 @@ pipeline {
             }
         }
 
+        stage('Configure grafana') {
+            steps {
+                sh 'rm -rf ansibile-influx'
+                sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
+                sh 'cd terraform-grafana'
+                //cd ansibile-influx
+                sh 'pwd'
+                sh 'ls'
+                sh 'rm -rf terraform-grafana/terraform-url.tfvars'
+                sh 'cp terraform-grafana/terraform-url.tmpl terraform-grafana/terraform-url.tfvars'
+                sh "sed -i 's/INFLUX/35.197.76.190/' terraform-grafana/terraform-url.tfvars"
+                sh "sed -i 's/GRAFANA/35.203.163.82/' tterraform-grafana/erraform-url.tfvars"
+                //Uncomment this!!
+                //sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
+            }
+        }
+
         stage('Configure influx') {
             steps {
                 sh 'rm -rf ansibile-influx'
@@ -54,7 +71,8 @@ pipeline {
                 //cd ansibile-influx
                 sh 'pwd'
                 sh 'ls'
-                sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
+                //Uncomment this!!
+                //sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
             }
         }
 
@@ -74,6 +92,9 @@ pipeline {
                         } 
                 }
         }
+
+
+
         stage('Approval') {
             steps {
                 script {
