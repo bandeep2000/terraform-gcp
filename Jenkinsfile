@@ -38,7 +38,7 @@ pipeline {
                 
                 script { 
                     // made in env variable, so it could interpolate
-                    env.ret = sh(script: 'terraform output ip', returnStdout: true)
+                    env.ret = sh(script: 'terraform output ip', returnStdout: true).trim()
                     println ret
                     
                     sh script: 'sudo inspec exec test/influx-test-disk.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
