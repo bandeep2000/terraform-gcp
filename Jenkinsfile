@@ -48,7 +48,7 @@ pipeline {
 
         stage('Configure grafana') {
             steps {
-                sh 'rm -rf ansibile-influx'
+                sh 'rm -rf terraform-grafana'
                 sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
                 sh 'cd terraform-grafana'
                 //cd ansibile-influx
