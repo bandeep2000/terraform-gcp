@@ -61,7 +61,7 @@ pipeline {
             }
         }
         // This stage get the new ips from terraform created and pushes to another repository
-        stage('Push IPs to git') {
+        stage('Push IPs to grafana git') {
             steps {
                 
                 sh 'sudo rm -rf terraform-grafana'
@@ -115,7 +115,7 @@ pipeline {
                 }
         }
 
-        stage('Push IPs to git') {
+        stage('Push IPs to influx git') {
             steps {
                 
                 sh 'sudo rm -rf terraform-influx-conf'
