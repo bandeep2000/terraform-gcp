@@ -71,7 +71,7 @@ pipeline {
                 sh "sed -i 's/INFLUX/35.197.76.191/' terraform-url.tfvars"
                 sh "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
                 sh "git add terraform-url.tfvars"
-                sh "git commit -m 'Modified url tfvars file' terraform-url.tfvars"
+                sh "git commit -m 'Modified url tfvars file'"
                 //sh "git push origin master"
                 sh "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
 
