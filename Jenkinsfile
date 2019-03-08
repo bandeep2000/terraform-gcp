@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo 'Creating infra..'
                 sh 'terraform init'
-                sh 'terraform destroy --force'
+                //sh 'terraform destroy --force'
                 sh 'terraform plan -out planfile'
                 sh 'terraform apply planfile'
                 
@@ -46,14 +46,32 @@ pipeline {
             }
         }
 
-        stage('Configure grafana') {
+        
+
+        stage('Configure influx and grafana') {
+            steps {
+                sh 'rm -rf ansibile-influx'
+                sh 'git clone https://github.com/bandeep2000/ansibile-influx.git'
+                sh 'cd ansibile-influx'
+                //cd ansibile-influx
+                sh 'pwd'
+                sh 'ls'
+                //Uncomment this!!
+                sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
+            }
+        }
+        // This stage get the new ips from terraform created and pushes to another repository
+        stage('Push IPs to git') {
             steps {
                 
                 sh 'sudo rm -rf terraform-grafana'
                 sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
                 script {
+                    // Adding on the top as before cd to directory as terraform output will
+                    // fail other wise
                     env.ip_influx = sh(script: 'terraform output ip', returnStdout: true).trim()
                     env.ip_grafana = sh(script: 'terraform output ip', returnStdout: true).trim()
+                    //cd to directory checked out in prev step
                     dir ('terraform-grafana') {
                         sh script: 'pwd'
                     
@@ -69,7 +87,7 @@ pipeline {
                         sh script: "sed -i 's/INFLUX/35.197.76.190/' terraform-url.tfvars"
                         sh script: "sed -i 's/INFLUX/" + ip_influx + "/'"  + " terraform-url.tfvars"
                         sh script: "sed -i 's/GRAFANA/" + ip_grafana + "/'"  + " terraform-url.tfvars"
-                        //sh script: "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
+                        
                         sh script: "git add terraform-url.tfvars"
                         sh script: "git commit -m 'Modified url tfvars file'"
                         
@@ -81,19 +99,6 @@ pipeline {
             }
         }
 
-        stage('Configure influx') {
-            steps {
-                sh 'rm -rf ansibile-influx'
-                sh 'git clone https://github.com/bandeep2000/ansibile-influx.git'
-                sh 'cd ansibile-influx'
-                //cd ansibile-influx
-                sh 'pwd'
-                sh 'ls'
-                //Uncomment this!!
-                //sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
-            }
-        }
-
         stage('Test influx') {
             steps {
                 script { 
@@ -102,22 +107,16 @@ pipeline {
                             println ret
                             
                             sh script: 'sudo inspec exec test/influx-service-up.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
-                            //sh script : "sudo sed -i 's/GCP_INFLUX/${ret}/' test/influx-ping.rb"
-                            //env.GCP_INFLUX = sh(script: 'terraform output ip', returnStdout: true)
-                            //sh script 'export GCP_INFLUX=$GCP_INFLUX'
-                            //print GCP_INFLUX
-                            //sh script: 'sudo inspec exec test/influx-ping.rb'
+                            
                         } 
                 }
         }
 
-
-
-        stage('Approval') {
+        stage('Approval to delete') {
             steps {
                 script {
                     echo 'Skipping this'
-                    //def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
+                    def userInput = input(id: 'confirm', message: 'Delete everthing?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
                 }
             }
         }
