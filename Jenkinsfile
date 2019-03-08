@@ -19,7 +19,7 @@ pipeline {
                         )
                         */
                         
-                    }
+                    
 
                         
                   
@@ -33,7 +33,7 @@ pipeline {
                         sh script: "git commit -m 'Modified url tfvars file'"
                         
                         sh script: "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
-                    
+                    }
                 }
                 
                 
