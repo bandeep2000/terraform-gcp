@@ -63,13 +63,13 @@ pipeline {
                 }
                 //sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
                 //sh 'cd terraform-grafana'
-                //cd ansibile-influx
+                
                 sh 'pwd'
                 sh 'ls'
-                sh 'rm -rf terraform-grafana/terraform-url.tfvars'
-                sh 'cp terraform-grafana/terraform-url.tmpl terraform-grafana/terraform-url.tfvars'
-                sh "sed -i 's/INFLUX/35.197.76.191/' terraform-grafana/terraform-url.tfvars"
-                sh "sed -i 's/GRAFANA/35.203.163.82/' terraform-grafana/terraform-url.tfvars"
+                sh 'rm -rf terraform-url.tfvars'
+                sh 'cp terraform-url.tmpl terraform-url.tfvars'
+                sh "sed -i 's/INFLUX/35.197.76.191/' terraform-url.tfvars"
+                sh "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
                 sh "git add terraform-url.tfvars"
                 sh "git commit -m 'Modified url tfvars file' terraform-url.tfvars"
                 sh "git push origin master"
