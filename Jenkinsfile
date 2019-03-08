@@ -53,30 +53,36 @@ pipeline {
                 //sh 'sudo rm -rf terraform-grafana'
                 
                 sh 'cd terraform-grafana'
+
+                
                 script {
-                    git(
-                    url: 'https://github.com/bandeep2000/terraform-grafana.git',
-                    credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
-                    branch: "master"
-                    )
+                    dir ('terraform-grafana') {
+                        sh 'pwd'
+
+                        git(
+                        url: 'https://github.com/bandeep2000/terraform-grafana.git',
+                        credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
+                        branch: "master"
+                        )
                     
 
-                    sh "ls -lat"
+                        sh "ls -lat"
+                    
+                        //sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
+                        //sh 'cd terraform-grafana'
+                        
+                        sh 'pwd'
+                        sh 'ls'
+                        sh 'rm -rf terraform-url.tfvars'
+                        sh 'cp terraform-url.tmpl terraform-url.tfvars'
+                        sh "sed -i 's/INFLUX/35.197.76.190/' terraform-url.tfvars"
+                        sh "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
+                        sh "git add terraform-url.tfvars"
+                        sh "git commit -m 'Modified url tfvars file'"
+                        //sh "git push origin master"
+                        sh "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
+                    }
                 }
-                //sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
-                //sh 'cd terraform-grafana'
-                
-                sh 'pwd'
-                sh 'ls'
-                sh 'rm -rf terraform-url.tfvars'
-                sh 'cp terraform-url.tmpl terraform-url.tfvars'
-                sh "sed -i 's/INFLUX/35.197.76.190/' terraform-url.tfvars"
-                sh "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
-                sh "git add terraform-url.tfvars"
-                sh "git commit -m 'Modified url tfvars file'"
-                //sh "git push origin master"
-                sh "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
-
                 //Uncomment this!!
                 //sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
             }
