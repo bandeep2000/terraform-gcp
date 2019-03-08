@@ -46,8 +46,11 @@ pipeline {
             }
         }
 
-        stage('Checkout external proj') {
+        
+
+        stage('Configure grafana') {
             steps {
+                sh 'rm -rf terraform-grafana'
                 script {
                     git(
                     url: 'https://github.com/bandeep2000/terraform-grafana.git',
@@ -58,14 +61,8 @@ pipeline {
 
                     sh "ls -lat"
                 }
-            }
-        }
-
-        stage('Configure grafana') {
-            steps {
-                sh 'rm -rf terraform-grafana'
-                sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
-                sh 'cd terraform-grafana'
+                //sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
+                //sh 'cd terraform-grafana'
                 //cd ansibile-influx
                 sh 'pwd'
                 sh 'ls'
