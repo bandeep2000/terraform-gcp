@@ -62,10 +62,10 @@ pipeline {
                         )
                     
 
-                        //sh script: "ls -lat"
+                        sh script: "ls -lat"
                 
                         
-                        //sh script: 'pwd'
+                        sh script: 'pwd'
                         
                         //sh script: 'rm -rf terraform-url.tfvars'
                         //sh script: 'cp terraform-url.tmpl terraform-url.tfvars'
