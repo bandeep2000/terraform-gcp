@@ -60,10 +60,12 @@ pipeline {
                         credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
                         branch: "master"
                         )
-                        */              
+                        */    
+                        env.ip = sh(script: 'terraform output ip', returnStdout: true).trim()          
                         sh script: 'rm -rf terraform-url.tfvars'
                         sh script: 'cp terraform-url.tmpl terraform-url.tfvars'
                         sh script: "sed -i 's/INFLUX/35.197.76.190/' terraform-url.tfvars"
+                        sh script: "sed -i 's/INFLUX/" + ip + "/'"  + " terraform-url.tfvars"
                         sh script: "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
                         sh script: "git add terraform-url.tfvars"
                         sh script: "git commit -m 'Modified url tfvars file'"
@@ -111,7 +113,8 @@ pipeline {
         stage('Approval') {
             steps {
                 script {
-                def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
+                    echo 'Skipping this'
+                    //def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
                 }
             }
         }
