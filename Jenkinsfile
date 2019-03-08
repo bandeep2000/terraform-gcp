@@ -71,7 +71,7 @@ pipeline {
                     // Adding on the top as before cd to directory as terraform output will
                     // fail other wise
                     env.ip_influx = sh(script: 'terraform output ip', returnStdout: true).trim()
-                    env.ip_grafana = sh(script: 'terraform output ip', returnStdout: true).trim()
+                    env.ip_grafana = sh(script: 'terraform output ip-grafana', returnStdout: true).trim()
                     //cd to directory checked out in prev step
                     dir ('terraform-grafana') {
                         sh script: 'pwd'
