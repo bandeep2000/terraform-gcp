@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo 'Creating infra..'
                 sh 'terraform init'
-                //sh 'terraform destroy --force'
+                sh 'terraform destroy --force'
                 sh 'terraform plan -out planfile'
                 sh 'terraform apply planfile'
                 
@@ -52,7 +52,8 @@ pipeline {
                 sh 'sudo rm -rf terraform-grafana'
                 sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
                 script {
-                    env.ip = sh(script: 'terraform output ip', returnStdout: true).trim()
+                    env.ip_influx = sh(script: 'terraform output ip', returnStdout: true).trim()
+                    env.ip_grafana = sh(script: 'terraform output ip', returnStdout: true).trim()
                     dir ('terraform-grafana') {
                         sh script: 'pwd'
                     
@@ -66,8 +67,9 @@ pipeline {
                         sh script: 'rm -rf terraform-url.tfvars'
                         sh script: 'cp terraform-url.tmpl terraform-url.tfvars'
                         sh script: "sed -i 's/INFLUX/35.197.76.190/' terraform-url.tfvars"
-                        sh script: "sed -i 's/INFLUX/" + ip + "/'"  + " terraform-url.tfvars"
-                        sh script: "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
+                        sh script: "sed -i 's/INFLUX/" + ip_influx + "/'"  + " terraform-url.tfvars"
+                        sh script: "sed -i 's/GRAFANA/" + ip_grafana + "/'"  + " terraform-url.tfvars"
+                        //sh script: "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
                         sh script: "git add terraform-url.tfvars"
                         sh script: "git commit -m 'Modified url tfvars file'"
                         
