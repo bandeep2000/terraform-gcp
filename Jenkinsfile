@@ -53,7 +53,7 @@ pipeline {
                 
                 script {
                     dir ('terraform-grafana') {
-                        sh 'pwd'
+                        //sh 'pwd'
 
                         git(
                         url: 'https://github.com/bandeep2000/terraform-grafana.git',
