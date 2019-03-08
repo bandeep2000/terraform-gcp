@@ -72,7 +72,8 @@ pipeline {
                 sh "sed -i 's/GRAFANA/35.203.163.82/' terraform-url.tfvars"
                 sh "git add terraform-url.tfvars"
                 sh "git commit -m 'Modified url tfvars file' terraform-url.tfvars"
-                sh "git push origin master"
+                //sh "git push origin master"
+                sh "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
 
                 //Uncomment this!!
                 //sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
