@@ -52,6 +52,7 @@ pipeline {
                 sh 'sudo rm -rf terraform-grafana'
                 sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
                 script {
+                    env.ip = sh(script: 'terraform output ip', returnStdout: true).trim()
                     dir ('terraform-grafana') {
                         sh script: 'pwd'
                     
@@ -61,7 +62,7 @@ pipeline {
                         branch: "master"
                         )
                         */    
-                        env.ip = sh(script: 'terraform output ip', returnStdout: true).trim()          
+                                  
                         sh script: 'rm -rf terraform-url.tfvars'
                         sh script: 'cp terraform-url.tmpl terraform-url.tfvars'
                         sh script: "sed -i 's/INFLUX/35.197.76.190/' terraform-url.tfvars"
