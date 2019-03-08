@@ -6,18 +6,24 @@ pipeline {
         stage('Configure grafana') {
             steps {
                 
+                sh 'sudo rm -rf terraform-grafana'
+                sh 'git clone https://github.com/bandeep2000/terraform-grafana.git'
                 script {
                     dir ('terraform-grafana') {
                         sh script: 'pwd'
                     
-                        git(
+                        /*git(
                         url: 'https://github.com/bandeep2000/terraform-grafana.git',
                         credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
                         branch: "master"
                         )
+                        */
+                        
                     }
+
+                        
                   
-                        //sh script: 'pwd'
+                        //
                         
                         //sh script: 'rm -rf terraform-url.tfvars'
                         //sh script: 'cp terraform-url.tmpl terraform-url.tfvars'
