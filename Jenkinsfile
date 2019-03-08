@@ -53,14 +53,14 @@ pipeline {
                 
                 script {
                     dir ('terraform-grafana') {
-                        //sh 'pwd'
-                    }
+                        sh script: 'pwd'
+                    
                         git(
                         url: 'https://github.com/bandeep2000/terraform-grafana.git',
                         credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
                         branch: "master"
                         )
-                    
+                    }
 
                         sh script: "ls -lat"
                 
@@ -77,6 +77,7 @@ pipeline {
                         //sh script: "git push https://bandeep2000:$GIT_BAN_PASSWD@github.com/bandeep2000/terraform-grafana.git"
                     
                 }
+                
                 
             }
         }
