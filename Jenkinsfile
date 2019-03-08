@@ -41,7 +41,7 @@ pipeline {
                     env.ret = sh(script: 'terraform output ip', returnStdout: true).trim()
                     println ret
                     
-                    sh script: 'sudo inspec exec test/influx-test-disk.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
+                    //sh script: 'sudo inspec exec test/influx-test-disk.rb  -t ssh://${USER}@${ret} -i /var/ssh/key.pem'
                 } 
             }
         }
@@ -51,7 +51,12 @@ pipeline {
         stage('Configure grafana') {
             steps {
                 //sh 'sudo rm -rf terraform-grafana'
+                script {
                 dir("terraform-grafana")
+
+                sh 'pwd'
+
+                }
                 script {
                     git(
                     url: 'https://github.com/bandeep2000/terraform-grafana.git',
