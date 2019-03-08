@@ -51,12 +51,8 @@ pipeline {
         stage('Configure grafana') {
             steps {
                 //sh 'sudo rm -rf terraform-grafana'
-                script {
-                dir("terraform-grafana")
-
-                sh 'pwd'
-
-                }
+                
+                sh 'cd terraform-grafana'
                 script {
                     git(
                     url: 'https://github.com/bandeep2000/terraform-grafana.git',
