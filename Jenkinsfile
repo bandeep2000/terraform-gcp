@@ -50,7 +50,7 @@ pipeline {
 
         stage('Configure grafana') {
             steps {
-                sh 'rm -rf terraform-grafana'
+                //sh 'sudo rm -rf terraform-grafana'
                 script {
                     git(
                     url: 'https://github.com/bandeep2000/terraform-grafana.git',
@@ -70,6 +70,10 @@ pipeline {
                 sh 'cp terraform-grafana/terraform-url.tmpl terraform-grafana/terraform-url.tfvars'
                 sh "sed -i 's/INFLUX/35.197.76.191/' terraform-grafana/terraform-url.tfvars"
                 sh "sed -i 's/GRAFANA/35.203.163.82/' terraform-grafana/terraform-url.tfvars"
+                sh "git add terraform-url.tfvars"
+                sh "git commit -m 'Modified url tfvars file' terraform-url.tfvars"
+                sh "git push origin master"
+
                 //Uncomment this!!
                 //sh 'sudo ansible-playbook -s -u $USER   --private-key=/var/ssh/key.pem -i ansibile-influx/inventories/test/ ansibile-influx/playbook/gcp-influx.yml'
             }
