@@ -29,15 +29,6 @@ pipeline {
                     //cd to directory checked out in prev step
                     dir ('terraform-grafana1') {
                         sh script: 'pwd'
-                    
-                        /*git(
-                        url: 'https://github.com/bandeep2000/terraform-grafana.git',
-                        credentialsId: '818d7b6d-e83c-4a03-9df4-fd2cac801b55',
-                        branch: "master"
-                        )
-                        */  
-
-                        // TODO add catch try  
                                   
                         sh script: 'rm -rf terraform-url.tfvars'
                         // Copy template
@@ -55,13 +46,11 @@ pipeline {
                         catch(Exception e) {
                             echo 'e'
                         }
-                        
-                        
+                         
                         
                     }
                 }
-                
-                
+                   
                 
             }
         }
